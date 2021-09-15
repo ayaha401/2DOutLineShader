@@ -3,7 +3,9 @@ Shader "Unlit/OutLine"
     Properties
     {
         [PerRendererData]_MainTex ("Texture", 2D) = "white" {}
-        _Width ("Width", Range(0.0, 1.0)) = 0.01
+        _Width ("Width", Range(0.0, 0.01)) = 0.001
+        _WidthXMul ("Width X Mul", float) = 1.0
+        _WidthYMul ("Width Y Mul", float) = 1.0
         [PerRendererData]_Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
         _OutLineColor ("OutLineColor", Color) = (1.0, 1.0, 1.0, 1.0)
 
@@ -54,6 +56,8 @@ Shader "Unlit/OutLine"
             float _Width; 
             float4 _Color;
             float4 _OutLineColor;
+            float _WidthXMul;
+            float _WidthYMul;
 
             v2f vert (appdata v)
             {
@@ -72,10 +76,10 @@ Shader "Unlit/OutLine"
             float4 frag (v2f i) : SV_Target
             {
                 float4 originalCol = tex2D(_MainTex, i.uv);
-                float4 leftShift = tex2D(_MainTex, float2(i.uv.x + _Width, i.uv.y));
-                float4 rightShift = tex2D(_MainTex, float2(i.uv.x - _Width, i.uv.y));
-                float4 upShift = tex2D(_MainTex, float2(i.uv.x, i.uv.y + _Width * 3.0));
-                float4 downShift = tex2D(_MainTex, float2(i.uv.x, i.uv.y - _Width * 3.0));
+                float4 leftShift = tex2D(_MainTex, float2(i.uv.x + (_Width * _WidthXMul), i.uv.y));
+                float4 rightShift = tex2D(_MainTex, float2(i.uv.x - (_Width * _WidthXMul), i.uv.y));
+                float4 upShift = tex2D(_MainTex, float2(i.uv.x, i.uv.y + (_Width * _WidthYMul)));
+                float4 downShift = tex2D(_MainTex, float2(i.uv.x, i.uv.y - (_Width * _WidthYMul)));
 
                 float4 outLineCol = saturate((leftShift.a - originalCol.a) + (rightShift.a - originalCol.a) + (upShift.a - originalCol.a) + (downShift.a - originalCol.a));
                 outLineCol = outLineCol * _OutLineColor;

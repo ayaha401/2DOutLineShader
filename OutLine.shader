@@ -1,5 +1,5 @@
 //================================================================================================
-//      a3ParallaxCardShader    Var 1.0.0
+//      2DOutLineShader    Var 1.0.0
 //
 //      Copyright (C) 2021 ayaha401
 //      Twitter : @ayaha__401
@@ -7,7 +7,7 @@
 //      This software is released under the MIT License.
 //      see https://github.com/ayaha401/2DOutLineShader/blob/main/LICENSE
 //================================================================================================
-Shader "Unlit/OutLine"
+Shader "Unlit/2DOutLineShader"
 {
     Properties
     {

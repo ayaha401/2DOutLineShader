@@ -49,7 +49,7 @@ public class OutLineShaderGUI : ShaderGUI
                 GUILayout.FlexibleSpace();
                 if(GUILayout.Button("How to use (Japanese)"))
                 {
-                    System.Diagnostics.Process.Start("");
+                    System.Diagnostics.Process.Start("https://github.com/ayaha401/2DOutLineShader/wiki");
                 }
             }
         }

@@ -7,7 +7,7 @@
 //      This software is released under the MIT License.
 //      see https://github.com/ayaha401/2DOutLineShader/blob/main/LICENSE
 //================================================================================================
-Shader "Unlit/2DOutLineShader"
+Shader "Unlit/OutLine"
 {
     Properties
     {
@@ -19,6 +19,8 @@ Shader "Unlit/2DOutLineShader"
         _OutLineColor ("OutLineColor", Color) = (1.0, 1.0, 1.0, 1.0)
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+
+        [KeywordEnum(Part, All)] _Mode ("Mode", Float) = 0
     }
     SubShader
     {
@@ -42,6 +44,8 @@ Shader "Unlit/2DOutLineShader"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile _ PIXELSNAP_ON
+
+            #pragma multi_compile _MODE_PART _MODE_ALL
 
             #include "UnityCG.cginc"
 
@@ -95,11 +99,19 @@ Shader "Unlit/2DOutLineShader"
 
                 float4 col = originalCol + outLineCol;
                 col *= i.color;
-                col.rgb = col * (1.0 - outLineCol.a) + outLineCol * outLineCol.a;
-                col.rgb *= col.a;
+
+                #ifdef _MODE_PART
+                    col.rgb = col * (1.0 - outLineCol.a) + outLineCol * outLineCol.a;
+                    col.rgb *= col.a;
+                #elif _MODE_ALL
+                    col.rgb *= col.a;
+                #endif
+                
+                // col.rgb *= col.a;
                 return col;
             }
             ENDCG
         }
     }
+    CustomEditor "OutLineShaderGUI"
 }
